@@ -1,0 +1,58 @@
+# CourtVision configuration. Every key is optional; omitted keys use the defaults
+# in courtvision/config.py. Unknown keys are rejected so typos don't fail silently.
+
+models:
+  player_pose_model: yolov8s-pose.pt   # players + skeletons in one pass
+  player_conf: 0.35
+  player_detector: null                # optional fine-tuned player-only detector (keeps crowd out)
+  player_class: 0
+  pose_match_iou: 0.3
+  ball_model: yolov8s.pt               # COCO "sports ball"; use a fine-tuned ball model for broadcast
+  ball_class: 32
+  ball_conf: 0.05                      # low on purpose: the ball tracker filters by motion
+  ball_imgsz: 640
+  ball_candidates: 5
+  court_keypoint_model: null           # optional YOLO-pose model for court landmarks
+  court_keypoint_conf: 0.5
+  imgsz: 1280                          # players and court; broadcast players are small
+  device: null                         # cuda:0 | cpu | mps | null (auto)
+  half: false                          # FP16 on CUDA
+
+ball:
+  max_speed_px: 60          # max plausible ball movement per frame
+  max_interp_gap: 20        # frames
+
+teams:
+  samples_per_track: 12
+  sample_every: 5
+  min_samples: 3
+
+possession:
+  use_pose: true
+  keypoint_conf: 0.35
+  hand_radius: 0.22         # x player height
+  hand_extension: 0.25
+  bbox_fallback_radius: 0.12
+  switch_frames: 5
+  max_gap_frames: 8
+  backfill: true
+
+events:
+  max_pass_frames: 45
+
+court:
+  calibration: null         # JSON from tools/calibrate.py (fixed camera)
+  keypoint_names: []        # landmark names in the order your court model outputs them
+  filter_off_court: true
+  off_court_margin_m: 1.0
+
+kinematics:
+  smooth_window: 7
+  max_speed_kmh: 36
+
+render:
+  minimap: true
+  minimap_width: 360
+  show_speed: true
+  show_ids: true
+  event_banner_seconds: 1.5

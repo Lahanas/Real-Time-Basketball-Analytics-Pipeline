@@ -104,6 +104,8 @@ Without either, everything except the minimap, speed/distance and off-court filt
 
 ### Fine-tuned models (recommended for broadcast footage)
 
+**[`notebooks/train_benchmark_evaluate.ipynb`](notebooks/train_benchmark_evaluate.ipynb)** does all of this on a free Colab T4: downloads a Roboflow dataset, fine-tunes one YOLOv8 model for ball + player, reports mAP, writes `configs/finetuned.yaml`, benchmarks FPS (fine-tuned vs. stock), and scores possession against your labels.
+
 Out of the box everything runs on stock COCO weights, which is enough for a fixed gym camera but weak on broadcast video:
 
 - **Ball**: COCO's `sports ball` misses small, blurred balls and fires on look-alikes. Fine-tune a single-class YOLO on a basketball dataset (e.g. from Roboflow Universe) and set `models.ball_model` and `models.ball_class: 0`.
@@ -136,7 +138,13 @@ python evaluation/evaluate_possession.py outputs/clip_possession.json labels/cli
 | box only | _todo_ | _todo_ | _todo_ | _todo_ |
 | **pose** | _todo_ | _todo_ | _todo_ | _todo_ |
 
-<sub>Fill in from your own labelled clips; state how many clips and possessions.</sub>
+<sub>Fill in from your own labelled clips (notebook step 4); state how many clips and possessions.</sub>
+
+### Detector
+
+| Model | mAP@0.5 (all) | mAP@0.5 (ball) | mAP@0.5 (player) |
+|---|---|---|---|
+| YOLOv8s fine-tuned, 1280 px | _todo_ | _todo_ | _todo_ |
 
 ### Speed
 
@@ -165,6 +173,7 @@ courtvision/
   render.py       overlays, HUD, banners, minimap
   config.py       dataclass config, YAML loading
 tools/calibrate.py               click-to-calibrate fixed cameras
+notebooks/                       Colab: fine-tune, benchmark, evaluate
 evaluation/evaluate_possession.py
 configs/default.yaml
 tests/                           40 tests, no GPU or weights needed
